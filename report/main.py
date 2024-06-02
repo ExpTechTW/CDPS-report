@@ -12,18 +12,11 @@ import urllib3
 urllib3.disable_warnings()
 
 
-class onServerStartListener(Listener):
-    event = onServerStartEvent
-
-    def on_event(self, event):
-        print(event.pid)
-
-
 def get_report(stop_event):
     reports = []
-    url = f"https://api-{random.randint(1,2)}.exptech.dev/api/v2/eq/report?limit={time.sleep(config["limit"])}"
     with open("./config/report.json", 'r', encoding='utf-8') as f:
         config = json.loads(f.read())
+    url = f"https://api-{random.randint(1,2)}.exptech.dev/api/v2/eq/report?limit={config['limit']}"
     while not stop_event.is_set():
         data = []
         try:
@@ -57,4 +50,3 @@ def task(stop_event):
 
 log = Log()
 event_manager = Manager()
-event_manager.register_listener(onServerStartListener())
