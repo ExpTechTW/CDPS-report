@@ -1,5 +1,5 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": {
         "zh_tw": "接收地震報告"
     },
@@ -7,7 +7,7 @@
         "Yoyo0901"
     ],
     "dependencies": {
-        "cdps": ">=1.0.13"
+        "cdps": ">=1.0.18"
     },
     "resources": [
         "AGPL-3.0"
