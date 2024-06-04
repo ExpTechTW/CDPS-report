@@ -1,23 +1,25 @@
-from cdps.plugin.manager import Manager, Listener
-from cdps.plugin.events import onServerStartEvent
-from cdps.utils.logger import Log
-from plugins.report.src.events import onReport
 import json
 import random
-import requests
 import time
-import threading
+
+import requests
 import urllib3
+
+from cdps.plugin.manager import Manager
+from cdps.plugin.thread import new_thread
+from cdps.utils.logger import Log
+from plugins.report.src.events import onReport
 
 urllib3.disable_warnings()
 
 
-def get_report(stop_event):
+@new_thread
+def get_report():
     reports = []
     with open("./config/report.json", 'r', encoding='utf-8') as f:
         config = json.loads(f.read())
     url = f"https://api-{random.randint(1,2)}.exptech.dev/api/v2/eq/report?limit={config['limit']}"
-    while not stop_event.is_set():
+    while True:
         data = []
         try:
             data = requests.get(url, timeout=5)
@@ -43,10 +45,6 @@ def get_report(stop_event):
         time.sleep(config["timeout"])
 
 
-def task(stop_event):
-    task_thread_1 = threading.Thread(target=get_report, args=(stop_event,))
-    task_thread_1.start()
-
-
 log = Log()
 event_manager = Manager()
+get_report()
